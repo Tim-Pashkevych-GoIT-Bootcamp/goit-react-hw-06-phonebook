@@ -1,21 +1,17 @@
-import {
-  ContactForm,
-  ContactsList,
-  ContactsListFilter,
-  Section,
-} from 'components';
+import { ContactsForm, ContactsList, ContactsListFilter } from 'components';
 
 export const App = () => {
   return (
     <>
-      <Section title="Phonebook">
-        <ContactForm />
-      </Section>
-
-      <Section title="Contacts">
+      <section>
+        <ContactsForm />
+      </section>
+      <section>
         <ContactsListFilter />
+      </section>
+      <section>
         <ContactsList />
-      </Section>
+      </section>
     </>
   );
 };
