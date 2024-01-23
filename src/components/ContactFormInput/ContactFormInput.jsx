@@ -1,16 +1,16 @@
-import { nanoid } from 'nanoid';
+import { nanoid } from '@reduxjs/toolkit';
 import css from './ContactFormInput.module.css';
+import { useFormContext } from 'react-hook-form';
 
 export const ContactFormInput = ({
   label,
   type,
   name,
-  value,
-  onChange,
   required = false,
   focus = false,
 }) => {
   const fieldId = nanoid();
+  const { register } = useFormContext();
 
   return (
     <fieldset className={css.formFieldSet}>
@@ -20,11 +20,8 @@ export const ContactFormInput = ({
       <input
         id={fieldId}
         type={type}
-        name={name}
-        value={value}
-        required={required}
         autoFocus={focus}
-        onChange={onChange}
+        {...register(name, { required })}
       />
     </fieldset>
   );

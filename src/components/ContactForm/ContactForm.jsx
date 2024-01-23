@@ -1,54 +1,30 @@
-import { useState } from 'react';
-import { nanoid } from 'nanoid';
-
 import css from './ContactForm.module.css';
 import { ContactFormInput, ContactFormButton } from 'components';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { addContact } from './../../redux/contactsSlice';
 
-const INITIAL_STATE = {
-  name: '',
-  number: '',
-};
+export const ContactForm = () => {
+  const dispatch = useDispatch();
+  const methods = useForm();
+  const { handleSubmit, reset } = methods;
 
-export const ContactForm = ({ onSubmit }) => {
-  const [contact, setContact] = useState(INITIAL_STATE);
-
-  const onChange = ({ target }) =>
-    setContact(prev => ({ ...prev, [target.name]: target.value }));
-
-  const onFormSubmit = event => {
-    event.preventDefault();
-
-    const id = nanoid();
-    const { name, number } = contact;
-
+  const onFormSubmit = data => {
+    dispatch(addContact(data));
     reset();
-    onSubmit({ id, name, number });
-  };
-
-  const reset = () => {
-    setContact(INITIAL_STATE);
   };
 
   return (
-    <form className={css.form} name="contactForm" onSubmit={onFormSubmit}>
-      <ContactFormInput
-        label="Name"
-        type="text"
-        name="name"
-        value={contact.name}
-        required={true}
-        focus={true}
-        onChange={onChange}
-      />
-      <ContactFormInput
-        label="Number"
-        type="tel"
-        name="number"
-        value={contact.number}
-        required={true}
-        onChange={onChange}
-      />
-      <ContactFormButton text="Add contact" type="submit" />
-    </form>
+    <FormProvider {...methods}>
+      <form
+        className={css.form}
+        name="contactForm"
+        onSubmit={handleSubmit(onFormSubmit)}
+      >
+        <ContactFormInput label="Name" name="name" type="text" focus={true} />
+        <ContactFormInput label="Number" name="number" type="tel" />
+        <ContactFormButton text="Add contact" type="submit" />
+      </form>
+    </FormProvider>
   );
 };
